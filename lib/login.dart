@@ -85,7 +85,6 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
         ),
       ),
     );
-    // test
 
     _playEnterAnimation();
   }
@@ -96,56 +95,51 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
       animation: enterController,
       builder: (context, child) {
         return Scaffold(
-          // backgroundColor: Theme.of(context).primaryColor,
-          body: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
-            child: ListView(
-              padding: EdgeInsets.symmetric(vertical: 192.0, horizontal: 64.0),
-              children: <Widget>[
-                Opacity(
-                  opacity: titleOpacity.value,
-                  child: Text(
-                    "Pigeon",
-                    style: TextStyle(
-                      fontSize: Theme.of(context).textTheme.display2.fontSize * 0.9,
-                      fontWeight: FontWeight.w500,
-                    ),
+          backgroundColor: Theme.of(context).primaryColor,
+          body: ListView(
+            padding: EdgeInsets.symmetric(vertical: 192.0, horizontal: 64.0),
+            children: <Widget>[
+              Opacity(
+                opacity: titleOpacity.value,
+                child: Text(
+                  "Pigeon",
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.display2.fontSize * 0.9,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-                SizedBox(height: 24.0),
-                Opacity(
-                  opacity: subtitleOpacity.value,
-                  child: Text(
-                    "Crowdsourced food transport.",
-                    style: Theme.of(context).textTheme.headline,
+              ),
+              SizedBox(height: 24.0),
+              Opacity(
+                opacity: subtitleOpacity.value,
+                child: Text(
+                  "Crowdsourced food transport.",
+                  style: Theme.of(context).textTheme.headline,
+                ),
+              ),
+              SizedBox(height: 192.0),
+              Opacity(
+                opacity: loginOpacity.value,
+                child: ButtonTheme(
+                  height: 48,
+                  child: RaisedButton(
+                    onPressed: () {},
+                    child: Text('LOG IN'),
                   ),
                 ),
-                SizedBox(height: 192.0),
-                Opacity(
-                  opacity: loginOpacity.value,
+              ),
+              SizedBox(height: 8.0),
+              Opacity(
+                opacity: registerOpacity.value,
                   child: ButtonTheme(
-                    height: 48,
-                    child: RaisedButton(
-                      onPressed: () {},
-                      child: Text('LOG IN'),
-                    ),
+                  height: 48,
+                  child: RaisedButton(
+                    onPressed: () {},
+                    child: Text('REGISTER'),
                   ),
                 ),
-                SizedBox(height: 8.0),
-                Opacity(
-                  opacity: registerOpacity.value,
-                    child: ButtonTheme(
-                    height: 48,
-                    child: RaisedButton(
-                      onPressed: () {},
-                      child: Text('REGISTER'),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
       },

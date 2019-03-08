@@ -19,12 +19,14 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
+        // TODO: Switch to using colorScheme
         primaryColor: Colors.red[200],
+        primaryColorDark: Color(0xFFBA6B6C),
         accentColor: Colors.blueGrey[800],
         fontFamily: "Work Sans",
       ),
       // home: MyHomePage(title: 'Pigeon'),
-      home: LoginScreen(),
+      home: LandingScreen(),
     );
   }
 }

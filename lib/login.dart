@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
+class LandingScreen extends StatefulWidget {
   @override
-  LoginScreenState createState() {
-    return LoginScreenState();
+  LandingScreenState createState() {
+    return LandingScreenState();
   }
 }
 
-class LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
+class LandingScreenState extends State<LandingScreen> with SingleTickerProviderStateMixin {
 
   AnimationController enterController;
   Animation<double> titleOpacity;
   Animation<double> subtitleOpacity;
   Animation<double> loginOpacity;
   Animation<double> registerOpacity;
+
+  String _pressed = "";
 
   @override
   void dispose() {
@@ -29,12 +31,22 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
     }
   }
 
+  void _statusListener(AnimationStatus status) async {
+    if (status == AnimationStatus.reverse) {
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => (_pressed == "login") ? LoginScreen() : RegisterScreen()));
+        
+        enterController.forward();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
 
     enterController = AnimationController(
-      duration: Duration(milliseconds: 1000),
+      duration: Duration(milliseconds: 250),
       vsync: this,
     );
 
@@ -45,7 +57,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
       CurvedAnimation(
         parent: enterController,
         curve: Interval(
-          0.0, 0.7,
+          0.2, 0.7,
         ),
       ),
     );
@@ -57,7 +69,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
       CurvedAnimation(
         parent: enterController,
         curve: Interval(
-          0.1, 0.8,
+          0.3, 0.8,
         ),
       ),
     );
@@ -69,7 +81,7 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
       CurvedAnimation(
         parent: enterController,
         curve: Interval(
-          0.2, 0.9,
+          0.4, 0.9,
         ),
       ),
     );
@@ -81,10 +93,12 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
       CurvedAnimation(
         parent: enterController,
         curve: Interval(
-          0.3, 1.0,
+          0.5, 1.0,
         ),
       ),
     );
+
+    enterController.addStatusListener(_statusListener);
 
     _playEnterAnimation();
   }
@@ -95,7 +109,6 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
       animation: enterController,
       builder: (context, child) {
         return Scaffold(
-          backgroundColor: Theme.of(context).primaryColor,
           body: ListView(
             padding: EdgeInsets.symmetric(vertical: 192.0, horizontal: 64.0),
             children: <Widget>[
@@ -119,23 +132,37 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
               ),
               SizedBox(height: 192.0),
               Opacity(
-                opacity: loginOpacity.value,
-                child: ButtonTheme(
-                  height: 48,
-                  child: RaisedButton(
-                    onPressed: () {},
-                    child: Text('LOG IN'),
+                opacity: (_pressed == "login") ? 1 : loginOpacity.value,
+                child: Hero(
+                  tag: "login",
+                  child: ButtonTheme(
+                    height: 48,
+                    child: RaisedButton(
+                      onPressed: () {
+                        _pressed = "login";
+                        enterController.reverse();
+                      },
+                      color: Theme.of(context).primaryColor,
+                      child: Text('LOG IN'),
+                    ),
                   ),
                 ),
               ),
               SizedBox(height: 8.0),
               Opacity(
-                opacity: registerOpacity.value,
+                opacity: (_pressed == "register") ? 1 : registerOpacity.value,
+                child: Hero(
+                  tag: "register",
                   child: ButtonTheme(
-                  height: 48,
-                  child: RaisedButton(
-                    onPressed: () {},
-                    child: Text('REGISTER'),
+                    height: 48,
+                    child: RaisedButton(
+                      onPressed: () {
+                        _pressed = "register";
+                        enterController.reverse();
+                      },
+                      color: Theme.of(context).primaryColor,
+                      child: Text('REGISTER'),
+                    ),
                   ),
                 ),
               ),
@@ -143,6 +170,115 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
           ),
         );
       },
+    );
+  }
+}
+
+class LoginScreen extends StatefulWidget {
+  @override
+  LoginScreenState createState() {
+    return LoginScreenState();
+  }
+}
+
+class LoginScreenState extends State<LoginScreen> with SingleTickerProviderStateMixin {
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Log in"),
+      ),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: EdgeInsets.symmetric(vertical: 192.0, horizontal: 32.0),
+          children: <Widget>[
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: "Username"
+              ),
+            ),
+            TextFormField(
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: "Password"
+              ),
+            ),
+            SizedBox(height: 48.0),
+            Hero(
+              tag: "login",
+              child: ButtonTheme(
+                height: 48,
+                child: RaisedButton(
+                  onPressed: () { },
+                  color: Theme.of(context).primaryColor,
+                  child: Text('LOG IN'),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class RegisterScreen extends StatefulWidget {
+  @override
+  RegisterScreenState createState() {
+    return RegisterScreenState();
+  }
+}
+
+class RegisterScreenState extends State<RegisterScreen> with SingleTickerProviderStateMixin {
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Register"),
+      ),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: EdgeInsets.symmetric(vertical: 192.0, horizontal: 32.0),
+          children: <Widget>[
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: "Email"
+              ),
+            ),
+            TextFormField(
+              decoration: InputDecoration(
+                labelText: "Username"
+              ),
+            ),
+            TextFormField(
+              obscureText: true,
+              decoration: InputDecoration(
+                labelText: "Password"
+              ),
+            ),
+            SizedBox(height: 48.0),
+            Hero(
+              tag: "register",
+              child: ButtonTheme(
+                height: 48,
+                child: RaisedButton(
+                  onPressed: () { },
+                  color: Theme.of(context).primaryColor,
+                  child: Text('REGISTER'),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home.dart';
 
 class LandingScreen extends StatefulWidget {
   @override
@@ -213,7 +214,13 @@ class LoginScreenState extends State<LoginScreen> with SingleTickerProviderState
               child: ButtonTheme(
                 height: 48,
                 child: RaisedButton(
-                  onPressed: () { },
+                  onPressed: () {
+                    // TODO: Proper login handling
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => HomeScreen(name: "Shreya Nagpal"),
+                        ), (route) => false);
+                  },
                   color: Theme.of(context).primaryColor,
                   child: Text('LOG IN'),
                 ),
